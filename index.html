@@ -8,14 +8,68 @@
     <!-- TODO: add apple touch icon -->
     </head> 
     <body>
-        <div data-role="page" id="latest">
+        <div data-role="page" id="home">
             <div data-role="header">
                 <h1>Moments worth paying for</h1>
             </div>
-            <div data-role="content">   
-                <a href="/latest" data-role="btn">Show latest moments</a>
-                <a href="/chart" data-role="btn">Show the moments chart</a>
+            <div data-role="content">
+                <div>
+                    Take a look at the moments that people have been submitting.
+                </div>
+                <a href="#latest" data-role="button">Show latest moments</a>
+                <a href="#top" data-role="button">Show the top moments</a>
             </div>
         </div>
+        
+        <div data-role="page" id="latest">
+            <div data-role="header">
+                <h1>Latest moments worth paying for</h1>
+            </div>
+            <div data-role="content">
+                <ul data-role="listview">
+                    <li>getting data from the find any film API...</li>
+                </ul>
+            </div>
+        </div>
+
+        <div data-role="page" id="top">
+            <div data-role="header">
+                <h1>Top moments worth paying for</h1>
+            </div>
+            <div data-role="content">
+                <ul data-role="listview">
+                    <li>getting data from the find any film API...</li>
+                </ul>
+            </div>
+        </div>
+
     </body>
+    
+    <script type="text/javascript" charset="utf-8">
+    
+        $(document).ready(function(){         
+            $('#latest').live('pageshow',function(event, ui){
+                faf.getMoments($(this), "http://moments.findanyfilm.com/api/moments/all/latest" );
+            });
+            $('#top').live('pageshow',function(event, ui){
+                faf.getMoments($(this), "http://moments.findanyfilm.com/api/moments/all/top" );
+            });
+        });
+        
+        
+        var faf = {};
+        faf.getMoments = function(page, uri) {
+            var ul = page.find('ul');
+            $.getJSON(uri+"?callback=?", function(data) {
+                var li = '';
+                for(m in data) {
+                    moment = data[m];
+                    li += '<li><h3><a href="'+moment.url+'">'+moment.film.title+'</a></h3><p>'+moment.moment+'</p><span class="ui-li-count">'+moment.votes+'</span></li>';
+                }
+                ul.html(li).listview('refresh');
+             });
+        };
+    
+    
+    </script>
 </html>
