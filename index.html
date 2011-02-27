@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" />
     <script src="http://code.jquery.com/jquery-1.5.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js"></script>
-    <!-- TODO: add apple touch icon -->
     </head> 
     <body>
         <div data-role="page" id="home">
@@ -17,7 +16,6 @@
                 <a href="#top" data-role="button">Show the top moments</a>
             </div>
         </div>
-        
         <div data-role="page" id="latest">
             <div data-role="header">
                 <h1>Latest moments worth paying for</h1>
@@ -28,7 +26,6 @@
                 </ul>
             </div>
         </div>
-
         <div data-role="page" id="top">
             <div data-role="header">
                 <h1>Top moments worth paying for</h1>
@@ -39,20 +36,14 @@
                 </ul>
             </div>
         </div>
-
     </body>
     
     <script type="text/javascript" charset="utf-8">
     
-        $(document).ready(function(){         
-            $('#latest').live('pageshow',function(event, ui){
-                faf.getMoments($(this), "http://moments.findanyfilm.com/api/moments/all/latest" );
-            });
-            $('#top').live('pageshow',function(event, ui){
-                faf.getMoments($(this), "http://moments.findanyfilm.com/api/moments/all/top" );
-            });
+        $(document).ready(function(){                     
+            faf.getMoments($('#latest'), "http://moments.findanyfilm.com/api/moments/all/latest" );
+            faf.getMoments($('#top'), "http://moments.findanyfilm.com/api/moments/all/top" );
         });
-        
         
         var faf = {};
         faf.getMoments = function(page, uri) {
@@ -60,13 +51,11 @@
             $.getJSON(uri+"?callback=?", function(data) {
                 var li = '';
                 for(m in data) {
-                    moment = data[m];
-                    li += '<li><h3><a href="'+moment.url+'">'+moment.film.title+'</a></h3><p>'+moment.moment+'</p><span class="ui-li-count">'+moment.votes+'</span></li>';
+                    li += '<li><h3><a href="'+data[m].url+'" target="_NEW">'+data[m].film.title+'</a></h3><p>'+data[m].moment+'</p><span class="ui-li-count">'+data[m].votes+'</span></li>';
                 }
                 ul.html(li).listview('refresh');
              });
         };
-    
     
     </script>
 </html>
